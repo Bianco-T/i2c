@@ -11,26 +11,24 @@
 int main() {
     // Habilito USB
     stdio_init_all();
-    i2c_init (i2c0, 1000 * 3200);
-    i2c_init (i2c1, 1000 * 400);
+    i2c_init (i2c0, 1000 * 400);
+    i2c_init (i2c1, 1000 * 1000);
     gpio_set_function(4, GPIO_FUNC_I2C);
     gpio_set_function(5, GPIO_FUNC_I2C);
+    gpio_set_function(18,GPIO_FUNC_I2C);
+    gpio_set_function(19,GPIO_FUNC_I2C);
     gpio_pull_up(4);
     gpio_pull_up(5);  
+    gpio_pull_up(18);
+    gpio_pull_up(19); 
     // Inicializacion del LCD
     lcd_init();
-    i2c_init(i2c1, 100*1000);
 
     // Inicializo BMP280
     bmp280_init();
-    i2c_init(i2c0,1000*340);
-    gpio_set_function(16,GPIO_FUNC_I2C);
-    gpio_set_function(17,GPIO_FUNC_I2C);
     // Obtengo parametros de compensacion
     struct bmp280_calib_param params;
-    bmp280_get_calib_params(&params);
-    uint8_t buf [6];
-    uint8_t reg = REG_PRESSURE_MSB;
+    bmp280_get_calib_params(&params);   
     i2c_write_blocking(i2c_default,ADDR,&reg, 1, true);
     i2c_read_blocking(i2c_default, ADDR,buf,6,false);
     // Variables para temperatura y presion
